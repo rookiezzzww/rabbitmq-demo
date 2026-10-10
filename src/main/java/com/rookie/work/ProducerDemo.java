@@ -31,7 +31,6 @@ public class ProducerDemo {
 
         System.out.println("消息发送成功~");
         //6. 资源释放
-        channel.close();
         connection.close();
     }
 }
