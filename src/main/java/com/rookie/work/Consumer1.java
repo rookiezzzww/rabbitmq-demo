@@ -32,8 +32,8 @@ public class Consumer1 {
         channel.basicConsume(Constants.WORK_QUEUE, true, consumer);
 
         //等待2s，让消费者有足够的时间消费消息
-        Thread.sleep(2000);
-        //6. 资源释放
-        connection.close();
+//        Thread.sleep(2000);
+//        //6. 资源释放
+//        connection.close();
     }
 }
