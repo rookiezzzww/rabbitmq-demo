@@ -48,7 +48,7 @@ public class RpcClient {
             public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
                 String response_msg = new String(body);
                 System.out.println("收到server端响应：" + response_msg);
-                if(properties.getCorrelationId().equals(correlationId)){
+                if(properties.getCorrelationId().equals(correlationId)){//如果响应信息的 correlationId 与请求信息的 correlationId 一致
                     response.offer(response_msg);//将响应信息放入阻塞队列
                 }
             }

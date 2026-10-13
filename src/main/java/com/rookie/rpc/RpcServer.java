@@ -21,6 +21,7 @@ public class RpcServer {
         //3. 声明队列
 //        channel.queueDeclare(Constants.RPC_REQUEST_QUEUE, false, false, false, null);
         //4.消费消息
+        channel.basicQos(1);//表示每个消费者最多同时持有 1 条未确认的消息，ack 之后才能拿新的
         DefaultConsumer consumer = new DefaultConsumer(channel){
             @Override
             public void handleDelivery(String consumerTag, com.rabbitmq.client.Envelope envelope, com.rabbitmq.client.AMQP.BasicProperties properties, byte[] body) throws IOException {
@@ -30,10 +31,10 @@ public class RpcServer {
                 AMQP.BasicProperties props = new AMQP.BasicProperties.Builder()
                         .correlationId(properties.getCorrelationId())
                         .build();
-                channel.basicPublish("", Constants.RPC_RESPONSE_QUEUE, props, response.getBytes("UTF-8"));
-                channel.basicAck(envelope.getDeliveryTag(), false);
+                channel.basicPublish("", properties.getReplyTo(), props, response.getBytes("UTF-8"));//需要手动确认
+                channel.basicAck(envelope.getDeliveryTag(), false);//需要手动确认
             }
         };
-        channel.basicConsume(Constants.RPC_RESPONSE_QUEUE, true, consumer);
+        channel.basicConsume(Constants.RPC_REQUEST_QUEUE, false, consumer);
     }
 }
