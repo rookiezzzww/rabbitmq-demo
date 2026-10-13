@@ -119,7 +119,6 @@ public class publisherConfirms {
                 long nextPublishSeqNo = channel.getNextPublishSeqNo();
                 confirmSet.add(nextPublishSeqNo);
                 channel.basicPublish("", Constants.PUBLISHER_CONFIRMS_QUEUE3, null, msg.getBytes());
-                //等待确认
             }
             while (!confirmSet.isEmpty()) {
                 Thread.sleep(10);
